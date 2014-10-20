@@ -1,0 +1,14 @@
+package evaluators;
+
+import org.tbot.methods.walking.Walking;
+import org.tbot.util.Evaluator;
+import org.tbot.wrappers.NPC;
+
+public class MonkEvaluator implements Evaluator<NPC> {
+
+	@Override
+	public double evaluate(NPC npc) {
+		return Walking.getRealDistanceTo(npc.getLocation());
+	}
+
+}
