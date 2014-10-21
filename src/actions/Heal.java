@@ -19,7 +19,7 @@ public class Heal {
 	public Heal(){
 		random = new Random();
 	}
-	
+
 	public void execute(){
 		NPC abbot = Npcs.getNearest("Abbot Langley");
 		moveToAbbotArea(abbot);
@@ -28,34 +28,36 @@ public class Heal {
 
 
 	private void talkToAbbot(NPC abbot){
-		while(Skills.getCurrentLevel(Skill.Hitpoints)!=Skills.getRealLevel(Skill.Hitpoints)){
-			abbot.interact("Talk-to");
-			Time.sleep(1200, 2000);
-			while(Players.getLocal().isMoving()){
-				Time.sleep(500);
-			}
-			Time.sleep(500, 1200);
-			if(NPCChat.isChatOpen()){
-				while(NPCChat.getOptionCount()==0){
-					if(NPCChat.canContinue()){
-						NPCChat.clickContinue();
-					}
-					Time.sleep(1200, 2000);
+		if(abbot!=null){
+			while(Skills.getCurrentLevel(Skill.Hitpoints)!=Skills.getRealLevel(Skill.Hitpoints)){
+				abbot.interact("Talk-to");
+				Time.sleep(1200, 2000);
+				while(Players.getLocal().isMoving()){
+					Time.sleep(500);
 				}
-				String[] options = NPCChat.getOptions();
-				NPCChat.selectOption(options[0]);
-				while(NPCChat.isChatOpen()){
-					if(NPCChat.canContinue()){
-						NPCChat.clickContinue();
+				Time.sleep(500, 1200);
+				if(NPCChat.isChatOpen()){
+					while(NPCChat.getOptionCount()==0){
+						if(NPCChat.canContinue()){
+							NPCChat.clickContinue();
+						}
+						Time.sleep(1200, 2000);
 					}
-					Time.sleep(1200, 2000);
+					String[] options = NPCChat.getOptions();
+					NPCChat.selectOption(options[0]);
+					while(NPCChat.isChatOpen()){
+						if(NPCChat.canContinue()){
+							NPCChat.clickContinue();
+						}
+						Time.sleep(1200, 2000);
+					}
 				}
 			}
 		}
 	}
 
 	private void moveToAbbotArea(NPC abbot){
-		if(abbot!=null && !abbot.isOnScreen()){
+		if(abbot!=null && !ABBOT_AREA.contains(Players.getLocal().getLocation())){
 			Tile[] abbotTiles = ABBOT_AREA.getTileArray();
 			int tileNum = random.nextInt(abbotTiles.length);
 			while(Walking.getRealDistanceTo(abbotTiles[tileNum])>2){
