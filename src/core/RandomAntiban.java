@@ -1,6 +1,8 @@
 package core;
 
 import java.util.GregorianCalendar;
+import java.util.Random;
+
 import org.tbot.methods.Camera;
 import org.tbot.methods.Mouse;
 import org.tbot.methods.Time;
@@ -9,14 +11,16 @@ import org.tbot.wrappers.WidgetChild;
 
 public class RandomAntiban {
 	private int combatStyle;
+	private Random random;
 	
 	public RandomAntiban(int combatStyle){
 		this.combatStyle = combatStyle;
+		this.random = new Random();
 	}
 	
 	public long execute(long antiBansDone, long startTime){
 		// only run at the rate of 2 anti bans per minute with a 10% chance to execute
-		if(antiBansPerMin(antiBansDone, startTime) <= 2 && RandomGenerator.getInstance().getGenerator().nextInt(100) < 10){
+		if(antiBansPerMin(antiBansDone, startTime) <= 2 && random.nextInt(100) < 10){
 			doRandomAntiBan();
 			antiBansDone++;
 		}
@@ -24,8 +28,8 @@ public class RandomAntiban {
 	}
 	
 	public void doRandomAntiBan(){
-		int random = RandomGenerator.getInstance().getGenerator().nextInt(10);
-		switch(random){
+		int r = random.nextInt(10);
+		switch(r){
 			case 0:
 			case 1:
 				Camera.rotateRandomly();
@@ -66,7 +70,7 @@ public class RandomAntiban {
 		}
 	}
 	
-	public long antiBansPerMin(long antiBansDone, long startTime){
+	private long antiBansPerMin(long antiBansDone, long startTime){
 		if(antiBansDone == 0){
 			return 0;
 		}else{
@@ -75,11 +79,11 @@ public class RandomAntiban {
 		}
 	}
 	
-	public int getRandomTab(){
-		int random = RandomGenerator.getInstance().getGenerator().nextInt(2);
-		if(random==0)
+	private int getRandomTab(){
+		int r = random.nextInt(2);
+		if(r==0)
 			return Widgets.TAB_COMBAT;
-		if(random==1)
+		if(r==1)
 			return Widgets.TAB_INVENTORY;
 		return Widgets.TAB_INVENTORY;
 	}

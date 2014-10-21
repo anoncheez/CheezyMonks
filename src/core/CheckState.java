@@ -13,15 +13,15 @@ public class CheckState {
 	public CheckState(){}
 
 	public State getState(){
-		if(FightingMonk()){
-			if(NeedToFlee()){
+		if(fightingMonk()){
+			if(needToFlee()){
 				return State.FLEE;
 			}else{
 				return State.FIGHTING;
 			}
 		}else{
 			//we are not fighting
-			if(NeedHealing()){
+			if(needHealing()){
 				return State.HEAL;
 			}else{
 				return State.IDLE;
@@ -29,17 +29,17 @@ public class CheckState {
 		}
 	}
 
-	public boolean Interacting() {
+	private boolean interacting() {
 		if(Players.getLocal().getInteractingEntity() != null){
 			return true;	
 		}
 		return false;
 	}
 
-	public boolean FightingMonk(){
-		if(Interacting()){
+	private boolean fightingMonk(){
+		if(interacting()){
 			//we are interacting with a monk
-			if(Players.getLocal().getInteractingEntity().getName().compareTo("Monk")==0){
+			if(Players.getLocal().getInteractingEntity().getName().equals("Monk")){
 				//if we can see health bar of monk we are interacting with, we are in combat
 				return Players.getLocal().getInteractingEntity().isHealthBarVisible();
 			}
@@ -47,14 +47,14 @@ public class CheckState {
 		return false;
 	}
 
-	public boolean NeedHealing(){
+	private boolean needHealing(){
 		if((double)Skills.getCurrentLevel(Skill.Hitpoints)/Skills.getRealLevel(Skill.Hitpoints)<0.5){
 			return true;
 		}
 		return false;
 	}
 
-	public boolean NeedToFlee(){
+	private boolean needToFlee(){
 		//monks can hit 1 only
 		if(Skills.getCurrentLevel(Skill.Hitpoints)<5){
 			return true;
@@ -62,7 +62,7 @@ public class CheckState {
 		return false;
 	}
 
-	public int getCombatStyle(){
+	protected int getCombatStyle(){
 		if(Widgets.openTab(Widgets.TAB_COMBAT)){
 			WidgetChild child = Widgets.getWidget(593, (Settings.get(Settings.SETTING_COMBAT_STYLE)*4)+6);
 			if(child!=null){
@@ -103,11 +103,11 @@ public class CheckState {
 		return -1;
 	}
 	
-	public int getCurrentXp(Skill skill){
+	protected int getCurrentXp(Skill skill){
 		return Skills.getExperience(skill);
 	}
 	
-	public Skill typeToSkill(int type){
+	protected Skill typeToSkill(int type){
 		switch(type){
 			case 1:
 				return Skill.Attack;

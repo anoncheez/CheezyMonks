@@ -16,17 +16,23 @@ import actions.Fight;
 import actions.Flee;
 import actions.Heal;
 
-@Manifest(name = "CheezyMonks", authors = "anoncheez", version = 0.2, description = "Kills monks near edge")
+@Manifest(name = "CheezyMonks", authors = "anoncheez", version = 0.3, description = "Kills monks near edge")
 public class CheezyMonks extends AbstractScript implements PaintListener {
 	private CheckState checkStates;
 	private RandomAntiban antiban;
+	private Fight fight;
+	private Flee flee;
+	private Heal heal;
 	private long antiBansDone;
+	private long startTime;
 	private int startCombatExp;
 	private int startHpExp;
-	private long startTime;
 	private int combatType;
 	
 	public CheezyMonks(){
+		this.fight = new Fight();
+		this.heal = new Heal();
+		this.flee = new Flee();
 		this.checkStates = new CheckState();
 		this.combatType = checkStates.getCombatStyle();
 		if(this.combatType==-1){
@@ -48,11 +54,11 @@ public class CheezyMonks extends AbstractScript implements PaintListener {
 		switch (state) {
 		
 			case IDLE:
-				new Fight();
+				fight.execute();
 				break;
 		
 			case FLEE:
-				new Flee();
+				flee.execute();
 				break;
 		
 			case FIGHTING:
@@ -60,7 +66,7 @@ public class CheezyMonks extends AbstractScript implements PaintListener {
 				break;
 				
 			case HEAL:
-				new Heal();
+				heal.execute();
 				break;
 			
 			default:

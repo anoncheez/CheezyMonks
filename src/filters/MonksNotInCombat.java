@@ -7,7 +7,7 @@ public class MonksNotInCombat implements Filter<NPC> {
 
 	@Override
 	public boolean accept(NPC npc) {
-		if(npc.getName().compareTo("Monk")==0){
+		if(npc.getName().equalsIgnoreCase("Monk")){
 			if(!npc.isHealthBarVisible()){
 				return true;
 			}

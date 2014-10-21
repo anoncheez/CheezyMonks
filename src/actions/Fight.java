@@ -14,29 +14,37 @@ import filters.MonksNotInCombat;
 public class Fight {
 
 	public Fight() {
-		boolean fightNotFound = true;
-		while(fightNotFound){
-			NPC monk = Npcs.getBest(new MonkEvaluator(), new MonksNotInCombat());
-			if(monk!=null){
-				if(monk.isOnScreen()){
-					Camera.turnTo(monk);
-					monk.interact("Attack");
-					while(Players.getLocal().isMoving()){
-						Time.sleep(200);
-					}
-					fightNotFound = false;
-				}else{
-					Path path = Walking.findPath(monk);
-					if(path!=null){
-						path.traverse();
-					}
-					while(Players.getLocal().isMoving()){
-						Time.sleep(200);
-					}
-				}
-			}else{
-				//all monks are dead
-				Time.sleep(800, 1200);
+		
+	}
+	
+	public void execute(){
+		NPC monk = Npcs.getBest(new MonkEvaluator(), new MonksNotInCombat());
+		if(monk!=null){
+			moveToMonk(monk);
+			attackMonk(monk);
+		}else{
+			//all monks are dead, script will go back into fight after 1sec
+		}
+	}
+	
+	private void attackMonk(NPC monk){
+		if(monk!=null && monk.isOnScreen()){
+			Camera.turnTo(monk);
+			monk.interact("Attack");
+			while(Players.getLocal().isMoving()){
+				Time.sleep(200);
+			}
+		}
+	}
+	
+	private void moveToMonk(NPC monk){
+		if(monk!=null && !monk.isOnScreen()){
+			Path path = Walking.findPath(monk);
+			if(path!=null){
+				path.traverse();
+			}
+			while(Players.getLocal().isMoving()){
+				Time.sleep(200);
 			}
 		}
 	}
