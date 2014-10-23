@@ -2,14 +2,19 @@ package core;
 import org.tbot.methods.Players;
 import org.tbot.methods.Skills;
 import org.tbot.methods.Skills.Skill;
+import org.tbot.wrappers.Area;
 
 
 
 public class CheckState {
+	static final Area MONK_AREA = new Area(3044, 3482, 3059, 3498);
 
 	public CheckState(){}
 
 	public State getState(){
+		if(!atMonkArea()){
+			return State.WALK_TO_MONKS;
+		}
 		if(fightingMonk()){
 			if(needToFlee()){
 				return State.FLEE;
@@ -29,6 +34,13 @@ public class CheckState {
 	private boolean interacting() {
 		if(Players.getLocal().getInteractingEntity() != null){
 			return true;	
+		}
+		return false;
+	}
+	
+	private boolean atMonkArea(){
+		if(MONK_AREA.contains(Players.getLocal().getLocation())){
+			return true;
 		}
 		return false;
 	}

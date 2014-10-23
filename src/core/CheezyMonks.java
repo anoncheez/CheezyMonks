@@ -11,18 +11,19 @@ import org.tbot.internal.Manifest;
 import org.tbot.internal.event.listeners.PaintListener;
 import org.tbot.methods.Time;
 import org.tbot.methods.walking.Walking;
-
 import actions.Fight;
 import actions.Flee;
 import actions.Heal;
+import actions.WalkToMonks;
 
-@Manifest(name = "CheezyMonks", authors = "anoncheez", version = 0.3, description = "Kills monks near edge")
+@Manifest(name = "CheezyMonks", authors = "anoncheez", version = 1.0 , description = "Kills monks, can heal and flee.")
 public class CheezyMonks extends AbstractScript implements PaintListener {
 	private SkillPaint sp = new SkillPaint();  
 	private MouseTrail mt = new MouseTrail();
 	private Fight fight = new Fight();
 	private Flee flee = new Flee();
 	private Heal heal = new Heal();
+	private WalkToMonks walk = new WalkToMonks();
 	private CheckState checkStates = new CheckState();
 	private RandomAntiban antiban = new RandomAntiban();
 	private long antiBansDone;
@@ -36,11 +37,15 @@ public class CheezyMonks extends AbstractScript implements PaintListener {
 
 	@Override
 	public int loop() {
-		Walking.setRun(true);
+		if(Walking.getRunEnergy()>20){
+			Walking.setRun(true);
+		}
 		antiBansDone = antiban.execute(antiBansDone, startTime);
 		State state = checkStates.getState();
 		switch (state) {
-		
+			case WALK_TO_MONKS:
+				walk.execute();
+				break;
 			case IDLE:
 				fight.execute();
 				break;
