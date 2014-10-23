@@ -1,6 +1,5 @@
 package actions;
 
-import org.tbot.methods.Camera;
 import org.tbot.methods.Npcs;
 import org.tbot.methods.Players;
 import org.tbot.methods.Time;
@@ -29,7 +28,6 @@ public class Fight {
 	
 	private void attackMonk(NPC monk){
 		if(monk!=null && monk.isOnScreen()){
-			Camera.turnTo(monk);
 			monk.interact("Attack");
 			while(Players.getLocal().isMoving()){
 				Time.sleep(200);
